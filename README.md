@@ -4,48 +4,28 @@ We are going to do some more SQL apartment **CRUD** again, but this time, we are
 
 ### Getting started
 
-* Fork and clone this repo as normal
-* You have to setup a node sequelize project to begin
-* `index.js` can be used to take test your database and put code-along notes in
-* Each part of the lab has a corresponding `.js` file for you to do your work in. 
-* Add, commit, and push your changes when you finish each part
-* Make a pull request!
-
-## Setting up a node sequelize project
-
-You will need to initialize a node project and setup sequelize with the sequelize CLI
+- Clone this repo
+- We will set up a sequelize project in this repo together
+- Each part of the lab has a corresponding `.js` file for you to do your work in. 
+- Add, commit, and push your changes when you finish each part
+- Make a pull request!
 
 ### Starting a node project
+Initilize node with the `npm init -y` command. 
 
-The first thing to do in your project folder is to initilize node with the `npm init -y` command. 
-
-Aftarwards make sure to create a .gitignore file that tells git not to track your node modules!
-
-```bash
-echo node_modules >> .gitignore
-```
+Afterwards make sure to create a .gitignore file that tells git not to track your node modules!
 
 ### Seting up sequelize
-
-Now its time to set up the sequelize node package! 
-
-You will need to install the sequelize package with `npm` along with the postgres dialect package. Run `npm i sequelize pg` to install the required packages.
-
-To generate the boilerplate for a sequelize project, run `sequelize init`
-
-The next step is to create the database we will use. Run `createdb sequelize_apartments`. Check to make sure it worked by starting up your `psql` shell and using the `\l` to list all the databases. 
-
-Once your database is created, its time to update sequelize's config file. Set the development database to "sequelize_apartments" and the dialect to "postgres", then remove all of the other unnessasry junk.
-
-```json
-{
-  "development": {
-    "database": "sequelize_apartments",
-    "host": "127.0.0.1",
-    "dialect": "postgres"
-  }
-}
-```
+- Install the sequelize package with: `npm i sequelize`
+- A `node_modules` folder has appeared! We don't ever want to commit that folder. So create a `.gitignore` file and write "node_modules" in it, and git will never even see the node_modules folder.
+- To generate the boilerplate for a sequelize project, run `sequelize init`. This will generate new folders: config, models, migrations, and seeders.
+- Look at the `config/config.json` file that got generated: it tells sequelize what database to connect to. Let's make some changes to this file:
+  - Change the database value to 'sequelize-apartments'.
+  - Change the dialect to 'postgres'.
+  - If you are on a mac, delete the username and password; otherwise change those values to your database username and password.
+  - You can delete the 'test' and 'production' objects if you want; we don't need them but they also don't break anything.
+- Run `sequelize db:create` to create the database. It will probably yell at you to install the `pg` package. Do this with `npm install pg`.
+- Try `sequelize db:create` one more time. You may see an error that "database postgres does not exist", create this database using psql, and then one final `sequelize db:create` will (finally!) create our project database.
 
 ## Planning Databse Models
 
@@ -67,17 +47,19 @@ Remember this **ERD**?
 
 ![ERD](./img/ERD.png)
 
-
-
-Take a moment to plan out what tables you will need, and what columns they will contain.
+Take a moment to plan out what tables you will need, what columns they will contain, and what their data types will be.
 
 ### Create Those Models!
+We're going to use the `sequelize model:generate` command, which will give us two things:
+1. A _migration_: the migration is a file that will contain our one-time database setup commands. (`CREATE TABLE etc...`)Previously, we've done this with `\i schema.sql` or something similar. But sequelize offers a lot of upgrades on our old system.
+1. A _model_: the model is a javascript object that will let us send CRUD commands to our database.
 
-First we will need to make the sequelize models, and then we will migrate them to our database. We can use the `sequelize model:generate` command to create the models. 
+Remember the syntax we need:
+```bash
+sequelize model:generate --name=yourModelNameInSingular --attributes=firstColumn:firstDataType,secondColumn=secondDataType
+```
 
-What will we need to supply for the `--name` and `--attributes` to create our models?
-
-**Note** Sequelize will handle the pluralization of models and tables for us, so when we create our models, they should be singular. Read more [here](https://sequelize.org/master/manual/naming-strategies.html#singular-vs--plural)
+**Note** Sequelize will handle the pluralization of models and tables for us, so when we create our models, they should be singular. Read more [here](https://sequelize.org/master/manual/naming-strategies.html#singular-vs--plural). Sequelize will also handle creating an auto-incrementing id, createdAt, and updatedAt column on every model, so don't supply those in the attributes!
 
 <details>
   <summary>What Do The Commands Look Like?</summary>
@@ -91,67 +73,86 @@ What will we need to supply for the `--name` and `--attributes` to create our mo
 Once your models are created, check the files in  the`./models` and in `./migrations` folders to make sure they are right. Sequelize uses the migrations to create tables in the database and the models to interface with them.
 
 ### Migration time! 
+`sequelize db:migrate` will tell sequelize to run all migration files in the migrations folder. Run this command, then fire up the `psql` shell, connect to our database and use `\dt` to see the new tables! Don't worry if you find a mistake at this point, sequelize has got your back. Use the command `sequelize db:migrate:undo` if you need to make a correction.
 
-`sequelize db:migrate` will tell sequelize to make tables in database from our migration files. Fire up the `psql` shell, connect to our database and use `\dt` to see the new tables! Don't worry if you find a mistake at this point, sequelize has got your back. Use the command `sequelize db:migrate:undo` if you need to make a correction.
+### Lets Do Some **CRUD**!
+Complete the prompts in each section file of the lab. You can run your files using `node` command. *e.g* `node lab-1.js`
 
-Lastly, but not leastly, we have to tell sequelize about the model associations. We will have to update the model files in the `./models` folder.
-
-<details>
-  <summary>How do I Update The Models?</summary>
-
-  *One owner can have many properties,* so we need to update `./models/owner.js` to reflect this:
-
-  ```javascript
-    static associate(models) {
-      // define association here
-      models.owner.hasMany(models.property)
-    }
-  ```
-
-  *One property can have only one owner,* so we need to update `./models/property.js` to reflect this:
-
-  ```javascript
-    static associate(models) {
-      // define association here
-      models.property.belongsTo(models.owner)
-    }
-  ```
-</details>
-
-### Test out the models
-
-Now would be a great time to run some database test queries to make sure it all works right!
-
-## Lets Do Some **CRUD**!
-
-There are four parts to the lab, each part has a series of prompts that include at least one url to the sequelize API docs that might be helpful. Don't forget to check the gitbook notes and google if you get stuck.
-
-You can run your files using `node` command. *e.g* `node lab-1.js`
+You're going to want to keep an eye on your database tables (using psql or tablePlus) to see if your commands are having the desired effects!
 
 **WATCH OUT!** if you solve one of the prompts, but don't comment it out, it will keep running everytime you run the file with `node`!
 
-* Part 1: `lab-1.js` covers basic **CRUD** with sequelize -- no relations.
-* Part 2: `lab-2.js` has propmts that focus on the *relationship* between the models
-* Part 3: `lab-3.js` uses sequelize simple queries with *operators*, *ordering* and *limiting*
-* Part 4: `lab-4.js` is the **bonus** part of the lab and has more complex queries that use everything
+* `lab-1.js`: inserting data into our db
+* `lab-2.js`: querying & updating
 
-## 😱 Node has scary errors! Help!
+### Using sequelize's associations
+Sequelize offers some tools called _associations_ that will write JOIN statements for us automagically. To activate these associations, we need some commands in our model files:
 
-![AHHHHHHHHHH](./img/error.png)
+*One owner can have many properties,* so we need to update `./models/owner.js` to reflect this:
 
-**Don't panic!** node prints out *big* errors with sometimes not super useful info in them. Always make your console a little bigger and scroll to the top of the error. *The top has the most helpful parts!* 
+```javascript
+  static associate(models) {
+    // define association here
+    models.owner.hasMany(models.property)
+  }
+```
+This line automatically generates these functions:
+```js
+// 1)
+// assuming that yuki has already been looked up with something like
+// const yuki = await models.owner.findOne({
+//   where: { name: 'Yuki' }
+// })
+yuki.getProperties() // this will give us all properties Yuki owns
+// by running this sql:
+// SELECT * FROM properties WHERE ownerId = <yuki's id>
 
-Pay attention to red squiggles in vscode, and if you get really stumped, copy errors into google and search stackexange for them. 
 
-<details>
-  <summary>WAIT! I Keep getting that <i>exact error</i> in the picture! What do I do?</summary>
+// 2)
+// assuming we have already looked up a property with
+// const willowspring = await models.property.findOne({
+//   where: { name: 'Willowspring' }
+// })
+yuki.addProperty(willowspring) // this will set willowspring's ownerId to yuki's id
+// by running this sql:
+// UPDATE properties
+// SET ownerId = <yuki's id>
+// WHERE properties.id = <willowspring's id>
+```
 
-  hmmm... it says `db` is not defined...
 
-  Did you remember to require your models at the top of your file?
 
-  ```javascript
-  // 1. require your models
-  const db = require('./models')
-  ```
-</details>
+*One property can have only one owner,* so we need to update `./models/property.js` to reflect this:
+
+```javascript
+  static associate(models) {
+    // define association here
+    models.property.belongsTo(models.owner)
+  }
+```
+This line automatically generates these functions:
+```js
+// 1)
+// assuming we have already looked up a property with
+// const archstone = await models.property.findOne({
+//   where: { name: 'Archstone' }
+// })
+archstone.getOwner() // this will give us archstone's owner
+// by running sql like this:
+// SELECT * FROM owners
+// WHERE id = <archstone's ownerId>
+
+
+// 2)
+// assuming we have already looked up an owner with
+// const jane = await owner.property.findOne({
+//   where: { name: 'Jane' }
+// })
+archstone.setOwner(jane) // this will set archstone's ownerId to Jane's id
+// by running sql like this:
+// UPDATE properties
+// SET ownerId = <jane's id>
+// WHERE properties.id = <archstone's id>
+```
+
+* `lab-3.js`: working with a 1-to-many association

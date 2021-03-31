@@ -1,23 +1,36 @@
-/**
- * CRUD WITH MODEL RELATIONSHIPS
- */
+// lab-2: RUD
+// TIP: each of these requests returns a promise, so use await or .then to unpack the promise
 
-// 1. require your models
+// -- 1. Print all the data in the owners table.
+// use models.whicheverModel.findAll()
 
-// 2. READ an owner with thier id and include thier properties, then console log the name of all of thier properties
-// you can check in your psql shell to find an owner with properties!
-// https://sequelize.org/master/manual/model-querying-finders.html
-// https://sequelize.org/master/manual/eager-loading.html
+// -- 2. Print all the data in the properties table.
 
-// 3. READ one of the owners from the db (your choice) and also the property named Brookevista. Add the Brookevista to the owner.
-// https://sequelize.org/master/manual/model-querying-finders.html
-// https://sequelize.org/master/manual/model-querying-basics.html#applying-where-clauses
-// https://sequelize.org/master/manual/assocs.html#-code-foo-belongsto-bar---code-
+// -- 3. Print just the names of all owners.
+// use the same approach as #1, then just loop through the array
 
-// 4. CREATE an owner named Erin age 21 who owns a property named Green Haven with 40 units 
-// BONUS add more than one proptery at the time of creation
-// https://sequelize.org/master/manual/creating-with-associations.html#hasmany---belongstomany-association
+// -- 4. Print the names and ages of all owners who are older than 30.
+// you can findAll() and then loop through them to perfom the age filter
+// STRETCH: try this https://sequelizedocs.fullstackacademy.com/search-operators/
 
-// 5. READ the owner named Erin and console log all of thier properties
-// https://sequelize.org/master/manual/eager-loading.html#fetching-a-single-associated-element
+// -- 5. Look up William, save him to a variable, and print it
+// models.whicheverModel.findOne({
+  // where: {
+    // whicheverAttribute: whicheverValue
+//   }
+// })
 
+// -- 6. Look up archstone, and save it to a variable. Print out just its number of units
+// same as above, but try to think through it instead of copy-pasting!
+
+
+// -- 5. Change Jane's age to 30.
+// first look up jane and save it to a variable
+// then, call .update({ age: 30 }) on that variable
+
+// -- 6. Change Jane's name to Janet.
+// same as above, but try to think through it instead of copy-pasting!
+
+// -- 7. Print the name of all properties whose name contains an `a`.
+// you can use a js loop
+// STRETCH: try to use the like operator https://sequelize.org/master/manual/model-querying-basics.html, go to the Operators section

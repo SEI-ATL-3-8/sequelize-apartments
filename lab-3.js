@@ -1,20 +1,33 @@
-/**
- * Using operaotrs, ordering and limiting
- * for advanced queries
- */
+// lab-3: associations
 
-// 1. require the db models
+// Associate each property with an owner:
+// Archstone - belongs to Yuki
+// Zenith Hills - belongs to Yuki
+// Willowspring - belongs to Jane
 
-// 2. require the sequelize operators
+// first look up the property and assign it to a variable
+// do the same for the owner
+// then use either yourProperty.setOwner(newOwner)
+// or yourOwner.addProperty(yourProperty)
 
-// 3. Show the names and ages of all owners who are older than 30.
-// https://sequelize.org/master/manual/model-querying-basics.html#operators
 
-// 4. Show the name of all properties whose name contains an `a`.
-// https://sequelize.org/master/manual/model-querying-basics.html#operators
 
-// 5. Show the ages of all of the owners in ascending order.
-// https://sequelize.org/master/manual/model-querying-basics.html#ordering
+// Print all the properties that are owned by Yuki.
+// look up Yuki and save it to a variable
+// then use yourVariable.getProperties()
 
-// 6. Show the names of the first three properties in your properties table.
-// https://sequelize.org/master/manual/model-querying-basics.html#limits-and-pagination
+// Print the count (length) of how many properties Yuki owns.
+
+// Print the name of Willowspring's owner.
+// look up willowspring, then use .getOwner()
+
+// Change Willowspring so that is now owned by Yuki.
+// look up both willowspring and yuki, and save them to variables
+
+
+// Print the names of the people who own properties that have 20 units or more
+// look up all properties, then loop through them, check their units count, and if it meets the criteria find their owner
+// STRETCH: try models.properties.findAll({
+//   includes: 'owner'
+// })
+// SUPER STRETCH: you can combine this includes with the gte search operator
