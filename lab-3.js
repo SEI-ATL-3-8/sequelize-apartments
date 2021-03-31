@@ -7,6 +7,13 @@
 const models = require('./models')
 
 const setOwners = async () => {
+
+// first look up the property and assign it to a variable
+// do the same for the owner
+// then use either yourProperty.setOwner(newOwner)
+// or yourOwner.addProperty(yourProperty)
+
+
     const archStone = await models.property.findOne({
         where: {name: 'Archstone'}
     })
@@ -41,7 +48,8 @@ const setOwners = async () => {
     yuki.addProperty(zenithHills)
     jane.addProperty(willowSpring)
 
-    // or 
+    // or
+
     // adding a parent to the child 
     /* 
     willowSpring.setOwner(jane)
@@ -49,18 +57,19 @@ const setOwners = async () => {
     zenithHills.setOwner(yuki)
     */
 }
-setOwners()
-
-// first look up the property and assign it to a variable
-// do the same for the owner
-// then use either yourProperty.setOwner(newOwner)
-// or yourOwner.addProperty(yourProperty)
-
+// setOwners()
 
 
 // Print all the properties that are owned by Yuki.
 // look up Yuki and save it to a variable
 // then use yourVariable.getProperties()
+const yukiProperties = async () => {
+    const yuki = await models.owner.findOne({where: {name: 'Yuki'}})
+    const properties = await yuki.getProperties()
+    console.log(properties)
+}
+yukiProperties()
+
 
 // Print the count (length) of how many properties Yuki owns.
 
