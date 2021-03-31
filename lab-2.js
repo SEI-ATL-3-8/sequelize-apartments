@@ -1,4 +1,6 @@
-// lab-2: RUD
+const models = require('./models')
+
+
 // TIP: each of these requests returns a promise, so use await or .then to unpack the promise
 
 // -- 1. Print all the data in the owners table.
@@ -13,12 +15,40 @@
 // you can findAll() and then loop through them to perfom the age filter
 // STRETCH: try this https://sequelizedocs.fullstackacademy.com/search-operators/
 
+// models.owner.findAll().then((allOwners) => {
+//   for (let owner of allOwners) {
+//     if (owner.age >= 30) {
+//       console.log(owner.name);
+//     }
+//   }
+
+//   for (let i = 0; i < allOwners.length; i++) {
+//     if (allOwners[i].age >= 30) {
+//       console.log(allOwners[i].name);
+//     }
+//   }
+// })
+
+
 // -- 5. Look up William, save him to a variable, and print it
 // models.whicheverModel.findOne({
   // where: {
     // whicheverAttribute: whicheverValue
 //   }
 // })
+const willTest = async() => {
+  const will = await models.owner.findOne({
+    where: {
+      name: 'William'
+    }
+  })
+  // SELECT * FROM owners WHERE name = 'William';
+  
+  console.log(will);
+}
+
+// willTest()
+
 
 // -- 6. Look up archstone, and save it to a variable. Print out just its number of units
 // same as above, but try to think through it instead of copy-pasting!

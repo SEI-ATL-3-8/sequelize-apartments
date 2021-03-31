@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/SEI-ATL-3-8/sequelize-apartments#readme",
   "dependencies": {
+    "pg": "^8.5.1",
     "sequelize": "^6.6.2"
   }
 }

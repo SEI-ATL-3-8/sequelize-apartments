@@ -1,3 +1,4 @@
+const models = require('./models')
 // lab-1: inserting data
 // TIPS:
 // 1) pull in all our models in one big package with const models = require('./models/)
@@ -14,3 +15,30 @@
 // Archstone - 20 units
 // Zenith Hills - 10 units
 // Willowspring - 30 units
+
+models.owner.create({
+  name: 'William',
+  age: 29
+})
+models.owner.create({
+  name: 'Jane',
+  age: 43
+})
+models.owner.create({
+  name: 'Yuki',
+  age: 67
+})
+models.property.create({
+  name: 'Archstone',
+  units: 20
+})
+models.property.create({
+  name: 'Zenith Hills',
+  units: 10
+})
+models.property.create({
+  name: 'Willowspring',
+  units: 30
+})
+
+
