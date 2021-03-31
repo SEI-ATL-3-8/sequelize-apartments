@@ -4,6 +4,52 @@
 // Archstone - belongs to Yuki
 // Zenith Hills - belongs to Yuki
 // Willowspring - belongs to Jane
+const models = require('./models')
+
+const setOwners = async () => {
+    const archStone = await models.property.findOne({
+        where: {name: 'Archstone'}
+    })
+    const zenithHills = await models.property.findOne({
+        where: {
+            name: 'Zenith Hills'
+        }
+    })
+    const willowSpring = await models.property.findOne({
+        where: {
+            name: 'Willowspring'
+        }
+    })
+    const yuki =await models.owner.findOne({
+        where: {
+            name: 'Yuki'
+        }
+    })
+    const jane =await models.owner.findOne({
+        where: {
+            name: 'Jane'
+        }
+    })
+    // console.log(archStone)
+    // console.log(zenithHills)
+    // console.log(zenithHills)
+    // console.log(yuki)
+    // console.log(jane)
+    
+    // adding a child to the parent 
+    yuki.addProperty(archStone)
+    yuki.addProperty(zenithHills)
+    jane.addProperty(willowSpring)
+
+    // or 
+    // adding a parent to the child 
+    /* 
+    willowSpring.setOwner(jane)
+    archStone.setOwner(yuki)
+    zenithHills.setOwner(yuki)
+    */
+}
+setOwners()
 
 // first look up the property and assign it to a variable
 // do the same for the owner
